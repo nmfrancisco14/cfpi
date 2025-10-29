@@ -8,7 +8,7 @@
 <link href="cfpi_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="cfpi_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="cfpi_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.5.56">
+  <meta name="generator" content="quarto-1.5.24">
 
   <meta name="author" content="Data Analytics Center">
   <title>Composite Floor Price Index (CFPI) for Palay</title>
@@ -395,7 +395,7 @@ Data Analytics Center
 <section id="cpfi-parameters" class="slide level2 tiny-text scrollable">
 <h2>4. CPFI Parameters</h2>
 <div class="extra-tiny-text">
-<table class="caption-top" style="width:100%;">
+<table style="width:100%;">
 <colgroup>
 <col style="width: 14%">
 <col style="width: 14%">
@@ -514,7 +514,7 @@ Data Analytics Center
 <section id="legend" class="slide level2 extra-tiny-text">
 <h2>Legend</h2>
 <div class="tiny-text scrollable">
-<table class="caption-top">
+<table>
 <colgroup>
 <col style="width: 19%">
 <col style="width: 61%">
@@ -700,7 +700,7 @@ Data Analytics Center
 \]</span></p>
 <div class="tiny-text scrollable">
 <h3 id="where">Where:</h3>
-<table class="caption-top">
+<table>
 <colgroup>
 <col style="width: 38%">
 <col style="width: 61%">
@@ -819,65 +819,616 @@ w_4 \left(\frac{Margin_t - Margin_{hist}}{Margin_{hist}}\right)
 \]</span></p>
 </div>
 </section>
-<section id="cfpi-calculator-tool" class="slide level2">
-<h2>8. CFPI Calculator tool</h2>
+<section id="cpi-sample-computation" class="slide level2 tiny-text">
+<h2>8. CPI Sample Computation</h2>
+<div class="scrollable">
 <div class="cell">
 <div class="cell-output-display">
-<p></p><div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div><p></p>
-</div>
-</div>
-<p>
-<script type="application/shiny-prerendered" data-context="server-start">
-library(tidyverse)
-library(DT)
-library(htmltools)
-library(plotly)
-library(jsonlite)
-library(httr)
-library(DiagrammeR)
-library(lmtest)
-library(knitr)
-library(purrr)
-library(daclakeapi)
-</script>
- 
-<script type="application/shiny-prerendered" data-context="server-extras">
-ojs_define <- function(..., .session = shiny::getDefaultReactiveDomain()) {
-  quos <- rlang::enquos(...)
-  vars <- rlang::list2(...)
-  nm <- names(vars)
-  if (is.null(nm)) {
-    nm <- rep_len("", length(vars))
-  }
-  mapply(function(q, nm, val) {
-    # Infer name, if possible
-    if (nm == "") {
-      tryCatch({
-        nm <- rlang::as_name(q)
-      }, error = function(e) {
-        code <- paste(collapse = "\n", deparse(rlang::f_rhs(q)))
-        stop("ojs_define() could not create a name for the argument: ", code)
-      })
-    }
-    .session$output[[nm]] <- val
-    outputOptions(.session$output, nm, suspendWhenHidden = FALSE)
-    .session$sendCustomMessage("ojs-export", list(name = nm))
-    NULL
-  }, quos, nm, vars, SIMPLIFY = FALSE, USE.NAMES = FALSE)
-  invisible()
+<div>
+<div id="gqvgbqqalv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gqvgbqqalv table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-</script>
-</p>
-<!--html_preserve-->
-<script type="application/shiny-prerendered" data-context="dependencies">
-{"type":"list","attributes":{},"value":[]}
-</script>
-<!--/html_preserve-->
-<!--html_preserve-->
-<script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81]}},"value":[{"type":"character","attributes":{},"value":["base","bsicons","bslib","cachem","cli","compiler","crosstalk","daclakeapi","data.table","datasets","DiagrammeR","digest","dplyr","DT","evaluate","farver","fastmap","fontawesome","forcats","generics","ggplot2","glue","graphics","grDevices","grid","gtable","hms","htmltools","htmlwidgets","httpuv","httr","jquerylib","jsonlite","knitr","later","lattice","lazyeval","lifecycle","lmtest","lubridate","magrittr","memoise","methods","mime","pillar","pkgconfig","plotly","promises","purrr","R6","RColorBrewer","Rcpp","readr","rlang","rmarkdown","rstudioapi","S7","sass","scales","shiny","shinyWidgets","stats","stringi","stringr","tibble","tidyr","tidyselect","tidyverse","timechange","tools","tzdb","utils","vctrs","viridisLite","visNetwork","webshot","withr","xfun","xtable","yaml","zoo"]},{"type":"character","attributes":{},"value":["4.4.1","0.1.2","0.8.0","1.1.0","3.6.3","4.4.1","1.2.1","0.1.0","1.16.4","4.4.1","1.0.11","0.6.36","1.1.4","0.33","1.0.4","2.1.2","1.2.0","0.5.2","1.0.0","0.1.3","4.0.0","1.7.0","4.4.1","4.4.1","4.4.1","0.3.6","1.1.3","0.5.8.1","1.6.4","1.6.15","1.4.7","0.1.4","1.8.8","1.48","1.4.4","0.22-6","0.2.2","1.0.4","0.9-40","1.9.3","2.0.3","2.0.1","4.4.1","0.12","1.11.0","2.0.3","4.10.4","1.3.3","1.1.0","2.6.1","1.1-3","1.1.0","2.1.5","1.1.4","2.27","0.16.0","0.2.0","0.4.9","1.4.0","1.11.1","0.8.6","4.4.1","1.8.4","1.5.1","3.2.1","1.3.1","1.2.1","2.0.0","0.3.0","4.4.1","0.4.0","4.4.1","0.6.5","0.4.2","2.1.2","0.5.5","3.0.2","0.51","1.8-4","2.3.10","1.8-12"]}]}]}
-</script>
-<!--/html_preserve-->
+
+#gqvgbqqalv thead, #gqvgbqqalv tbody, #gqvgbqqalv tfoot, #gqvgbqqalv tr, #gqvgbqqalv td, #gqvgbqqalv th {
+  border-style: none;
+}
+
+#gqvgbqqalv p {
+  margin: 0;
+  padding: 0;
+}
+
+#gqvgbqqalv .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: 75%;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+}
+
+#gqvgbqqalv .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#gqvgbqqalv .gt_title {
+  color: #333333;
+  font-size: 18px;
+  font-weight: bold;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#gqvgbqqalv .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#gqvgbqqalv .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#gqvgbqqalv .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gqvgbqqalv .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#gqvgbqqalv .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#gqvgbqqalv .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#gqvgbqqalv .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#gqvgbqqalv .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#gqvgbqqalv .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#gqvgbqqalv .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#gqvgbqqalv .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#gqvgbqqalv .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#gqvgbqqalv .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#gqvgbqqalv .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#gqvgbqqalv .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#gqvgbqqalv .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gqvgbqqalv .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#gqvgbqqalv .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#gqvgbqqalv .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#gqvgbqqalv .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gqvgbqqalv .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#gqvgbqqalv .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#gqvgbqqalv .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gqvgbqqalv .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gqvgbqqalv .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#gqvgbqqalv .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gqvgbqqalv .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#gqvgbqqalv .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#gqvgbqqalv .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#gqvgbqqalv .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gqvgbqqalv .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#gqvgbqqalv .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#gqvgbqqalv .gt_left {
+  text-align: left;
+}
+
+#gqvgbqqalv .gt_center {
+  text-align: center;
+}
+
+#gqvgbqqalv .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#gqvgbqqalv .gt_font_normal {
+  font-weight: normal;
+}
+
+#gqvgbqqalv .gt_font_bold {
+  font-weight: bold;
+}
+
+#gqvgbqqalv .gt_font_italic {
+  font-style: italic;
+}
+
+#gqvgbqqalv .gt_super {
+  font-size: 65%;
+}
+
+#gqvgbqqalv .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#gqvgbqqalv .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#gqvgbqqalv .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#gqvgbqqalv .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#gqvgbqqalv .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#gqvgbqqalv .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#gqvgbqqalv .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#gqvgbqqalv .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#gqvgbqqalv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="header gt_heading">
+<th colspan="18" class="gt_heading gt_title gt_font_normal gt_bottom_border">Sample Rice Price and Cost Indicators for Sept 2025</th>
+</tr>
+<tr class="odd gt_col_headings">
+<th id="date" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Date</th>
+<th id="fgate" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Farm gate price</th>
+<th id="fgate_real" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Farm gate price (Real)</th>
+<th id="cost_per_kg" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Cost per kg</th>
+<th id="cost_per_kg_real" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Cost per kg (real)</th>
+<th id="retail" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Retail price</th>
+<th id="retail_real" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Retail price (real)</th>
+<th id="area_harv" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Expected area harvsted</th>
+<th id="damage_area" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Total area damaged</th>
+<th id="area_sem" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Total area for the whole sem</th>
+<th id="monthly_ave_margin" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Average Margin (Ret - Farmgate)</th>
+<th id="urea" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Global urea price</th>
+<th id="urea_real" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Global urea price(real)</th>
+<th id="fuel" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Fuel cost</th>
+<th id="fuel_real" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Fuel cost (real)</th>
+<th id="imports" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Monthly Imports</th>
+<th id="rain" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Monthly average rainfall</th>
+<th id="fob" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Global FOB Rice Price</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_right" headers="date">2025-09-01</td>
+<td class="gt_row gt_right" headers="fgate">15.6</td>
+<td class="gt_row gt_right" headers="fgate_real">15.99508</td>
+<td class="gt_row gt_right" headers="cost_per_kg">14.31302</td>
+<td class="gt_row gt_right" headers="cost_per_kg_real">14.6755</td>
+<td class="gt_row gt_right" headers="retail">40.23</td>
+<td class="gt_row gt_right" headers="retail_real">41.24885</td>
+<td class="gt_row gt_right" headers="area_harv">457259.2</td>
+<td class="gt_row gt_right" headers="damage_area">0</td>
+<td class="gt_row gt_right" headers="area_sem">2162011</td>
+<td class="gt_row gt_right" headers="monthly_ave_margin">3.935065</td>
+<td class="gt_row gt_right" headers="urea">461.13</td>
+<td class="gt_row gt_right" headers="urea_real">472.8084</td>
+<td class="gt_row gt_right" headers="fuel">54.59</td>
+<td class="gt_row gt_right" headers="fuel_real">55.97252</td>
+<td class="gt_row gt_right" headers="imports">0</td>
+<td class="gt_row gt_right" headers="rain">400.9348</td>
+<td class="gt_row gt_right" headers="fob">358.79</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<blockquote>
+<p>Using equal weights of 0.1</p>
+</blockquote>
+<div class="tiny-text">
+<p><span class="math display">\[
+\begin{array}{l}
+\text{CFPI}_t =
+0.1 \left(\frac{25.25 - 24.46}{24.46}\right)
++ 0.1 \left(\frac{457259.2 - 0}{2162010.8}\right)
++ 0.1 \left(\frac{472.81 - 437.56}{437.56}\right)
++ 0.1 \left(\frac{55.97 - 55.74}{55.74}\right)
+\end{array}
+\]</span></p>
+<p><span class="math display">\[
+\begin{array}{l}
++ 0.1 \left(\frac{400.93 - 331.31}{331.31}\right)
++ 0.1 \left(\frac{0 - 240250.93}{240250.93}\right)
+- 0.1 \left(\frac{16 - 17.79}{17.79}\right)
+- 0.1 \left(\frac{1.32 - 3.94}{3.94}\right)
+- 0.1 \left(\frac{41.25 - 42.25}{42.25}\right)
+- 0.1 \left(\frac{358.79 - 505.19}{505.19}\right)
+\end{array}
+\]</span></p>
+<p>Compute each term:</p>
+<ol type="1">
+<li><span class="math inline">\((0.1 \times \frac{25.25-24.46}{24.46} = 0.1 \times \frac{0.79}{24.46} \approx 0.00323)\)</span></li>
+<li><span class="math inline">\((0.1 \times \frac{457259.2-0}{2162010.8} = 0.1 \times \frac{457259.2}{2162010.8} \approx 0.02115)\)</span></li>
+<li><span class="math inline">\((0.1 \times \frac{472.81-437.56}{437.56} = 0.1 \times \frac{35.25}{437.56} \approx 0.00805)\)</span></li>
+<li><span class="math inline">\((0.1 \times \frac{55.97-55.74}{55.74} = 0.1 \times \frac{0.23}{55.74} \approx 0.00041)\)</span></li>
+<li><span class="math inline">\((0.1 \times \frac{400.93-331.31}{331.31} = 0.1 \times \frac{69.62}{331.31} \approx 0.02103)\)</span></li>
+<li><span class="math inline">\((0.1 \times \frac{0-240250.93}{240250.93} = 0.1 \times \frac{-240250.93}{240250.93} = -0.1)\)</span></li>
+<li><span class="math inline">\((-0.1 \times \frac{16-17.79}{17.79} = -0.1 \times \frac{-1.79}{17.79} \approx 0.01006)\)</span></li>
+<li><span class="math inline">\((-0.1 \times \frac{1.32-3.94}{3.94} = -0.1 \times \frac{-2.62}{3.94} \approx 0.06650)\)</span></li>
+<li><span class="math inline">\((-0.1 \times \frac{41.25-42.25}{42.25} = -0.1 \times \frac{-1}{42.25} \approx 0.00237)\)</span></li>
+</ol>
+<p>10.<span class="math inline">\((-0.1 \times \frac{358.79-505.19}{505.19} = -0.1 \times \frac{-146.4}{505.19} \approx 0.02899)\)</span></p>
+<p>summing them all:</p>
+<p><span class="math display">\[
+CFPI_t \approx 0.00323 + 0.02115 + 0.00805 + 0.00041 + 0.02103 - 0.1 + 0.01006 + 0.06650 + 0.00237 + 0.02899
+\]</span></p>
+</div>
+<p>The computed CFPI is <span class="math display">\[
+\boxed{0.062}
+\]</span></p>
+</div>
+</section>
+<section id="cfpi-sample-interpretation" class="slide level2">
+<h2>9. CFPI Sample interpretation</h2>
+<div class="{smaller}">
+<table>
+<colgroup>
+<col style="width: 28%">
+<col style="width: 20%">
+<col style="width: 50%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>CFPI Value</th>
+<th>Interpretation</th>
+<th>Policy Action</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Less than -0.50</td>
+<td><strong>Stable</strong></td>
+<td>No action</td>
+</tr>
+<tr class="even">
+<td>-0.50 to 0.50</td>
+<td><strong>Watch</strong></td>
+<td>Monitor closely</td>
+</tr>
+<tr class="odd">
+<td>Greater than 0.50</td>
+<td><strong>Trigger</strong></td>
+<td>Implement floor price mechanism</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Thresholds may vary by purpose; monitor historical trends and seasonal patterns to calibrate levels accurately.</p>
+</blockquote>
+</div>
+</section>
+<section id="cfpi-calculator" class="slide level2">
+<h2>10. CFPI Calculator</h2>
+<p>Access the interactive CFPI calculator to explore the latest indicators:</p>
+<p><a href="https://ricelytics.philrice.gov.ph/shiny/cfpi_calculator/" class="btn btn-success" target="_blank">Open CFPI Calculator</a></p>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
+<div class="thank-you">
+<div style="font-size: 2.5em; font-weight: bold; text-align: center;">
+<p>Thank You!!</p>
+</div>
+<div style="margin-top: 1em; font-size: 1.2em; text-align: center;">
+<p>Questions or feedback?<br> <strong>philrice.dataanalytics@gmail.com</strong></p>
+</div>
+</div>
 <div class="quarto-auto-generated-content">
 <p><img src="www/dac.png" class="slide-logo"></p>
 <div class="footer footer-default">
@@ -1205,7 +1756,18 @@ ojs_define <- function(..., .session = shiny::getDefaultReactiveDomain()) {
         }
         return false;
       }
-      const onCopySuccess = function(e) {
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+      });
+      clipboard.on('success', function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -1237,29 +1799,7 @@ ojs_define <- function(..., .session = shiny::getDefaultReactiveDomain()) {
         }, 1000);
         // clear code selection
         e.clearSelection();
-      }
-      const getTextToCopy = function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-      }
-      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
-        text: getTextToCopy
       });
-      clipboard.on('success', onCopySuccess);
-      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-        // For code content inside modals, clipBoardJS needs to be initialized with a container option
-        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
-        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
-          text: getTextToCopy,
-          container: window.document.getElementById('quarto-embedded-source-code-modal')
-        });
-        clipboardModal.on('success', onCopySuccess);
-      }
         var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
         var mailtoRegex = new RegExp(/^mailto:/);
           var filterRegex = new RegExp('/' + window.location.host + '/');
