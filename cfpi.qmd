@@ -1,0 +1,272 @@
+---
+title: "Composite Floor Price Index (CFPI) for Palay"
+subtitle: "Methodology and Implementation framework  for trigger Mechanism for Floor Prices"
+author: "Data Analytics Center"
+institute: "Philippine Rice Research Institute"
+# format: revealjs
+format:
+  revealjs:
+    css: www/custom-styles.css
+    touch: true
+    controls: true
+    slide-number: true
+    pdf-separate-fragments: true
+    transition: fade
+    chalkboard: 
+      buttons: false
+    logo: www/dac.png
+    footer: "PhilRice Data Analytics Center"
+execute: 
+  echo: false
+  warning: false
+  message: false
+  freeze: auto
+server: shiny
+---
+
+```{r}
+#| label: setup
+#| echo: false
+
+library(tidyverse)
+library(DT)
+library(htmltools)
+library(plotly)
+library(jsonlite)
+library(httr)
+library(DiagrammeR)
+library(lmtest)
+library(knitr)
+library(purrr)
+library(daclakeapi)
+```
+
+## 1. Introduction
+
+-   **Executive Order No. 100 (2025)** mandates the establishment of a *floor price for palay* and the creation of *trigger mechanisms* for its timely implementation.
+-   This policy recognizes that **volatile market prices**, especially during **peak harvest seasons**, expose farmers to unfair trading conditions, eroding incomes and discouraging continued rice production.
+-   Rising production costs, climate-induced risks, and widening gaps between **farmgate and retail prices** further highlight the need for a **data-driven safeguard mechanism** that anticipates market downturns.
+
+------------------------------------------------------------------------
+
+## 2. Policy Context {.extra-tiny-text}
+
+> “The government shall guarantee a fair and just return to farmers by setting a floor price that covers production costs and provides reasonable income, while ensuring affordability and stability of rice supply for consumers.”\
+> — *Executive Order No. 100, 2025*
+
+-   The **Department of Agriculture (DA)**, through the **Steering Committee**, is mandated to:
+    -   Determine and adjust the floor price of palay;
+    -   Monitor market signals and supply conditions;
+    -   Recommend timely interventions to prevent farmgate price collapse.
+-   The **DA** shall determine, set and adjust floor price of palay to be purchased by the government based on the following conditions:
+    a.  Cost of Production
+    b.  Prevailing market prices
+    c.  Reasonable margins for farmers
+    d.  Welfare of both farmers and consumers; and
+    e.  Other relevant factors and conditions, such as:
+        i.  Emergencies or calamities affecting the rice supply chain and palay production
+        ii. Influx of import arrivals that could dampen farmgate price of palay
+        iii. Sharp decline in global rice prices that may impact the estimated landed cost of rice; and
+        iv. Government's capacity to purchase pa/ay at competitive prices and manage market intervention
+
+------------------------------------------------------------------------
+
+## 3. CFPI Design Principles
+
+1.  Timeliness: Detect early signals of price decline (1-month lead).
+
+2.  Comprehensiveness: Capture considerations mentioned in the EO.
+
+3.Transparency: Computable and explainable index.
+
+4.  Adaptability: Adjustable weights and thresholds for backtesting.
+
+------------------------------------------------------------------------
+
+## 4. CPFI Parameters {.tiny-text .scrollable}
+
+::: extra-tiny-text
+| **Category**                             | **Monthly Indicator**                                  | **Details / Formula**                                                                                                                                                   | **EO 100 Sec. 1 Considerations**                                    | **Relation to Farmer Risk**                               |      **Lag (Months)**       | **Source**             |
+|:----------|:----------|:----------|:----------|:----------|:---------:|:----------|
+| **A. FARM-LEVEL PRICES AND PROFIT**      | **1. Farmgate Price Deviation (**$FarmDev$)            | Deviation of farmgate price from monthly historical mean.<br>$$ FarmDev_t =\frac{FP_t - FP_{hist}}{FP_{hist}} $$                                                        | Prevailing market prices                                            | ↓ Lower deviation implies falling farmgate prices         |              1              | PSA                    |
+|                                          | **2. Farmer Profit Deviation (**$ProfitDev$)           | Deviation of monthly farmer profit from its historical mean.<br>$$ Profit_t = FP_t - PCost_t $$ $$ ProfitDev_t = \frac{Profit_t - Profit_{hist}}{Profit_{hist}} $$      | Cost of production; Reasonable farmer margins                       | ↓ Declining profits increase farmer vulnerability         |              1              | PSA, PhilRice DAC      |
+| **B. RETAIL-LEVEL PRICES AND PRICE GAP** | **3. Retail Price Deviation (**$RetDev$)               | Deviation of retail price from its historical monthly mean.<br>$$ RetDev_t =\frac{RP_t - RP_{hist}}{RP_{hist}} $$                                                       | Prevailing market prices; Welfare of farmers & consumers            | ↓ Signals weak consumer-side demand pressure              |              1              | PSA                    |
+|                                          | **4. Retail–Farmgate Price Gap Deviation (**$RetGap$)  | Difference between retail and farmgate prices.<br>$$ Margin_t = RP_t - FP_t $$ $$RetGap_t = \frac{Margin_t - Margin_{hist}}{Margin_{hist}} $$                           | Reasonable margins for farmers; Welfare of both farmers & consumers | ↑ Rising gap may indicate farmer disadvantage             |              1              | PSA, PhilRice DAC      |
+| **C. SUPPLY AND DAMAGES**                | **5. Area Planted / Expected Area Harvested (**$Area$) | Ratio of expected area to be harvested in month *t* to total semester area, adjusted for damaged area.<br> $$ Area_t = \frac{A^{harv}_t - A^{dam}_t}{A^{harv}_{sem}} $$ | Calamities, pest damage, and other supply shocks                    | ↑ Reduced harvest area signals production risk            | 0 (Current month preferred) | PRiSM, DA-FOS          |
+| **D. COST FACTORS**                      | **6. Fertilizer Cost Deviation (**$FertDev$)           | Deviation of fertilizer prices (e.g., Urea, Complete) from historical monthly average.<br>$$ FertDev_t =\frac{FC_t - FC_{hist}}{FC_{hist}} $$                           | Reasonable farmer margins; Cost of production                       | ↑ Rising input costs compress farmer income               |              1              | FPA                    |
+|                                          | **7. Fuel Price Deviation (**$FuelDev$)                | Deviation of monthly fuel price from 3-week moving average.<br>$$ FuelDev_t =\frac{FuelP_t - FuelP_{MA(3)}}{FuelP_{MA(3)}} $$                                           | Reasonable margin for farmers; Production logistics                 | ↑ Higher fuel costs increase production and hauling costs |              1              | DOE                    |
+| **E. CLIMATE AND QUALITY FACTORS**       | **8. Monthly Rainfall Deviation (**$RainDev$)          | Deviation of observed monthly rainfall from historical mean.<br>$$ RainDev_t ==\frac{Rain_t - Rain_{hist}}{Rain_{hist}} $$                                              | Calamities or extreme weather affecting rice supply                 | ↑ Excess or deficient rainfall affects yield & quality    |              1              | PAGASA, CHIRPS, Others |
+| **F. TRADE AND MARKET FACTORS**          | **9. Import Arrival Deviation (**$ImportDev$)          | Deviation of rice import arrivals from 3-month moving average.<br> $$ ImportDev_t =\frac{ImportQ_t - ImportQ_{MA(3)}}{ImportQ_{MA(3)}}$$                                | Influx of imports that could dampen farmgate price                  | ↑ More imports increase market supply pressure            |              1              | BOC, BPI               |
+|                                          | **10. Global Rice Price Deviation (**$GlobalPriceDev$) | Deviation of average FOB of Viet 25% and.or Thai 25% rice from 3-month moving average.<br>$$ GlobalPriceDev_t = \frac{FOB_t -FOB_{MA(3)}}{FOB_{MA(3)}} $$               | Sharp decline in global rice prices may reduce local farmgate price | ↓ Lower global price increases downward pressure          |              1              | FAO, USDA, VFA         |
+:::
+
+------------------------------------------------------------------------
+
+## Legend {.extra-tiny-text}
+
+::: {.tiny-text .scrollable}
+| **Symbol**         | **Definition / Description**                                                          | **Typical Unit** |
+|:-------------|:--------------------------------------------|:------------:|
+| $FP_t$             | Farmgate price in month *t*                                                           |       ₱/kg       |
+| $FP_{hist}$        | Historical mean farmgate price for the same month (multi-year average)                |       ₱/kg       |
+| $FarmDev_t$        | Farmgate price deviation from historical mean                                         |   \% or ratio    |
+| $PCost_t$          | Production cost in month *t*                                                          |       ₱/kg       |
+| $Profit_t$         | Farmer profit in month *t*, computed as $FP_t - PCost_t$                              |       ₱/kg       |
+| $Profit_{hist}$    | Historical mean of monthly farmer profit                                              |       ₱/kg       |
+| $ProfitDev_t$      | Deviation of current profit from historical mean                                      |   \% or ratio    |
+| $RP_t$             | Retail price in month *t*                                                             |       ₱/kg       |
+| $RP_{hist}$        | Historical mean retail price for the same month                                       |       ₱/kg       |
+| $RetDev_t$         | Retail price deviation from historical mean                                           |   \% or ratio    |
+| $Margin_t$         | Retail–farmgate price gap at month *t*, computed as $RP_t - FP_t$                     |       ₱/kg       |
+| $Margin_{hist}$    | Historical mean of monthly retail–farmgate price gap                                  |       ₱/kg       |
+| $RetGap_t$         | Deviation of current retail–farmgate price gap from historical mean                   |   \% or ratio    |
+| $A^{harv}_t$       | Expected area harvested in month *t*                                                  |        ha        |
+| $A^{dam}_t$        | Damaged area due to calamities/pests in month *t*                                     |        ha        |
+| $A^{harv}_{sem}$   | Total expected harvested area for the semester                                        |        ha        |
+| $Area_t$           | Ratio of effective harvested area in month *t* to total semester area                 |      ratio       |
+| $FC_t$             | Fertilizer cost (e.g., Urea, Complete\$ in month *t*                                  |  ₱/kg or ₱/bag   |
+| $FC_{hist}$        | Historical mean fertilizer cost for the same month                                    |  ₱/kg or ₱/bag   |
+| $FertDev_t$        | Fertilizer price deviation from historical mean                                       |   \% or ratio    |
+| $FuelP_t$          | Fuel price in month *t*                                                               |     ₱/liter      |
+| $FuelP_{MA(3)}$    | 3-month moving average of fuel price                                                  |     ₱/liter      |
+| $FuelDev_t$        | Fuel price deviation from 3-month moving average                                      |   \% or ratio    |
+| $Rain_t$           | Observed monthly rainfall                                                             |        mm        |
+| $Rain_{hist}$      | Historical mean rainfall for the same month                                           |        mm        |
+| $RainDev_t$        | Deviation of observed rainfall from historical mean                                   |   \% or ratio    |
+| $ImportQ_t$        | Volume of rice imports in month *t*                                                   |   metric tons    |
+| $ImportQ_{MA(3)}$  | 3-month moving average of rice import volume                                          |   metric tons    |
+| $ImportDev_t$      | Deviation of import volume from its 3-month moving average                            |   \% or ratio    |
+| $FOB_t$            | Monthly average Free-on-Board (FOB) price of imported rice (e.g., Viet 25%, Thai 25%) |     USD/ton      |
+| $FOB_{MA(3)}$      | 3-month moving average of global FOB price                                            |     USD/ton      |
+| $GlobalPriceDev_t$ | Deviation of global rice price from its 3-month moving average                        |   \% or ratio    |
+:::
+
+------------------------------------------------------------------------
+
+## 5. CFPI Computation {.tiny-text}
+
+
+### Composite Floor Price Index (CFPI) Formula
+
+$$
+\text{CFPI}_t = \sum_{i=1}^{n} w_i \text{IND'}_{i,t}
+$$
+
+::: {.tiny-text .scrollable}
+
+### Where:
+
+| Symbol | Definition |
+|:-------|:------------|
+| $\text{CFPI}_t$| Composite Floor Price Index at time $t$, indicating market risk of farmgate price decline at time $t+1$ |
+| $n$| Total number of indicators considered in the index |
+| $i$| Indicator index (e.g., farmgate price deviation, profit deviation, etc.) |
+| $w_i$| Assigned weight of the $i^{th}$indicator, reflecting its relative importance to farmer welfare or market risk |
+| $\text{IND'}_{i,t}$| Value of indicator $i$ at time $t$, with directional correction, whenever applicable |
+
+### Notes:
+- A **higher CFPI value** suggests **increasing farm-level vulnerability** and may **trigger** setting or enforcing a floor price.  
+- Indicator weights $w_i$can be determined using **expert elicitation**, **principal component analysis (PCA)**, or **equal weighting** as baseline.
+- Directional correction  is applied to indicator that has an expected **inverse relationship** with farmer's risk and/or farmgate prices. For such indicators, the corrected value is obtained as $\text{IND'}_{i,t} = IND_{i,t} \times (-1)$.
+
+:::
+
+---
+
+## 6. Condensed Formula {.tiny-text}
+
+### Composite Floor Price Index (CFPI)
+
+The CFPI is computed as the weighted sum of ten normalized and directionally corrected indicators representing key aspects of rice market dynamics, farmer profitability, and production risk.
+
+$$
+\begin{aligned}
+\text{CFPI}_t =\;& 
+w_1(FarmDev_t) +
+w_2(ProfitDev_t) +
+w_3(RetDev_t) +
+w_4(RetGap_t) +
+w_5(Area_t) + \\[6pt]
+& w_6(FertDev_t) +
+w_7(FuelDev_t) +
+w_8(RainDev_t) +
+w_9(ImportDev_t) +
+w_{10}(GlobalPriceDev_t)
+\end{aligned}
+$$
+
+
+### With direction correction
+
+$$
+\begin{aligned}
+\text{CFPI}_t =\;& 
+w_4(RetGap_t) +
+w_5(Area_t) +
+w_6(FertDev_t) +
+w_7(FuelDev_t) +
+w_8(RainDev_t) + \\[6pt]
+&w_9(ImportDev_t) 
+-w_1(FarmDev_t) -
+w_2(ProfitDev_t) -
+w_3(RetDev_t)  - 
+w_{10}(GlobalPriceDev_t)
+\end{aligned}
+$$
+
+
+---
+
+## 7. Full Formula {.tiny-text}
+
+### Composite Floor Price Index (CFPI)
+
+
+$$
+\begin{aligned}
+\text{CFPI}_t &= 
+w_1 \left(\frac{FP_t - FP_{hist}}{FP_{hist}}\right)
++ w_2 \left(\frac{Profit_t - Profit_{hist}}{Profit_{hist}}\right)
++ w_3 \left(\frac{RP_t - RP_{hist}}{RP_{hist}}\right) \\
+&\quad + w_4 \left(\frac{Margin_t - Margin_{hist}}{Margin_{hist}}\right)
++ w_5 \left(\frac{A^{harv}_t - A^{dam}_t}{A^{harv}_{sem}}\right)
++ w_6 \left(\frac{FC_t - FC_{hist}}{FC_{hist}}\right) \\
+&\quad + w_7 \left(\frac{FuelP_t - FuelP_{MA(3)}}{FuelP_{MA(3)}}\right)
++ w_8 \left(\frac{Rain_t - Rain_{hist}}{Rain_{hist}}\right)
++ w_9 \left(\frac{ImportQ_t - ImportQ_{MA(3)}}{ImportQ_{MA(3)}}\right) \\
+&\quad + w_{10} \left(\frac{FOB_t - FOB_{MA(3)}}{FOB_{MA(3)}}\right)
+\end{aligned}
+$$
+
+
+---
+
+
+### With direction correction  {.tiny-text}
+
+::: {.tiny-text}
+$$
+\begin{aligned}
+\text{CFPI}_t &= 
+w_4 \left(\frac{Margin_t - Margin_{hist}}{Margin_{hist}}\right)
++ w_5 \left(\frac{A^{harv}_t - A^{dam}_t}{A^{harv}_{sem}}\right)
++ w_6 \left(\frac{FC_t - FC_{hist}}{FC_{hist}}\right) \\
+&\quad + w_7 \left(\frac{FuelP_t - FuelP_{MA(3)}}{FuelP_{MA(3)}}\right)
++ w_8 \left(\frac{Rain_t - Rain_{hist}}{Rain_{hist}}\right)
++ w_9 \left(\frac{ImportQ_t - ImportQ_{MA(3)}}{ImportQ_{MA(3)}}\right) \\
+&\quad - w_1 \left(\frac{FP_t - FP_{hist}}{FP_{hist}}\right)
+- w_2 \left(\frac{Profit_t - Profit_{hist}}{Profit_{hist}}\right)
+- w_3 \left(\frac{RP_t - RP_{hist}}{RP_{hist}}\right) \\
+&\quad - w_{10} \left(\frac{FOB_t - FOB_{MA(3)}}{FOB_{MA(3)}}\right)
+\end{aligned}
+$$
+:::
+
+---
+
+## 8. CFPI Calculator tool
+
+```{r}
+shinyAppDir('cfpi_simulate')
+```
+

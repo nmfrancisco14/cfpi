@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+/.quarto/
+/_freeze
+/cfpi_files
+/cfpi_simulate/rsconnect
+cfpi.Rproj
+cfpi.html
