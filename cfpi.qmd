@@ -21,7 +21,7 @@ execute:
   warning: false
   message: false
   freeze: auto
-server: shiny
+
 ---
 
 ```{r}
@@ -262,11 +262,193 @@ w_4 \left(\frac{Margin_t - Margin_{hist}}{Margin_{hist}}\right)
 $$
 :::
 
+
 ---
 
-## 8. CFPI Calculator tool
+## 8. CPI  Sample Computation {.tiny-text}
+
+::: {.scrollable}
 
 ```{r}
-shinyAppDir('cfpi_simulate')
+library(gt)
+
+cfpidata_sample <- readRDS("cfpidata.rds") |> 
+  select(date,
+           fgate,
+           fgate_real,
+           cost_per_kg,
+           cost_per_kg_real,
+           retail,
+           retail_real,
+           area_harv,
+           damage_area,
+           area_sem,
+           monthly_ave_margin,
+           urea,
+           urea_real,
+           fuel,
+           fuel_real,
+           imports,
+           rain,
+           fob) |>
+    filter(date>=ymd(paste0("2025","09","01")))
+
+newnames <-  c("Date",
+               "Farm gate price",
+               "Farm gate price (Real)",
+               "Cost per kg",
+               "Cost per kg (real)",
+               "Retail price",
+               "Retail price (real)",
+               "Expected area harvsted",
+               "Total area damaged",
+               "Total area for the whole sem",
+               "Average Margin (Ret - Farmgate)",
+               "Global urea price",
+               "Global urea price(real)",
+               "Fuel cost",
+               "Fuel cost (real)",
+               "Monthly Imports",
+               "Monthly average rainfall",
+               "Global FOB Rice Price")
+
+
+names(newnames) <-  colnames(cfpidata_sample)
+
+gt_table <- cfpidata_sample %>%
+  gt() %>%
+  cols_label(!!!newnames) %>%
+  tab_header(
+    title = "Sample Rice Price and Cost Indicators for Sept 2025"
+  ) %>%
+  tab_options(
+    table.width = pct(75),          # Fit table width
+    table.font.size = px(14),       # Font size for readability
+    heading.title.font.size = px(18),
+    heading.title.font.weight = "bold",
+    column_labels.font.size = px(13),
+    column_labels.font.weight = "bold",
+    table.border.top.width = px(2),
+    table.border.bottom.width = px(2),
+    table.border.left.width = px(1),
+    table.border.right.width = px(1)
+  )
+
+gt_table
+
 ```
+
+> Using equal weights of 0.1
+
+::: {.tiny-text}
+```{r results='asis'}
+library(glue)
+
+# Latest CFPI row
+cfpicom_sample <- readRDS("cfpi_computed.rds") |> 
+  slice_max(date) |> 
+  mutate(across(where(is.numeric), round, 2)) |> 
+  as.list()
+
+# First part of formula
+cfpi_formula1 <- glue_data(
+  cfpicom_sample,
+"$$
+\\begin{{array}}{{l}}
+\\text{{CFPI}}_t = 
+0.1 \\left(\\frac{{{Margin} - {Margin_hist}}}{{{Margin_hist}}}\\right)
++ 0.1 \\left(\\frac{{{area_harv} - {damage_area}}}{{{area_sem}}}\\right)
++ 0.1 \\left(\\frac{{{urea_real} - {FC_hist}}}{{{FC_hist}}}\\right)
++ 0.1 \\left(\\frac{{{fuel_real} - {FuelP_MA3}}}{{{FuelP_MA3}}}\\right)
+\\end{{array}}
+$$"
+)
+
+# Second part of formula
+cfpi_formula2 <- glue_data(
+  cfpicom_sample,
+"$$
+\\begin{{array}}{{l}}
++ 0.1 \\left(\\frac{{{rain} - {Rain_hist}}}{{{Rain_hist}}}\\right)
++ 0.1 \\left(\\frac{{{imports} - {ImportQ_MA3}}}{{{ImportQ_MA3}}}\\right)
+- 0.1 \\left(\\frac{{{fgate_real} - {FP_hist}}}{{{FP_hist}}}\\right)
+- 0.1 \\left(\\frac{{{Profit} - {Profit_hist}}}{{{Profit_hist}}}\\right)
+- 0.1 \\left(\\frac{{{retail_real} - {RP_hist}}}{{{RP_hist}}}\\right)
+- 0.1 \\left(\\frac{{{fob} - {FOB_MA3}}}{{{FOB_MA3}}}\\right)
+\\end{{array}}
+$$"
+)
+
+# Print both formulas
+cat(cfpi_formula1)
+cat("\n\n")  # add spacing between blocks
+cat(cfpi_formula2)
+
+```
+
+
+Compute each term:
+
+1. $(0.1 \times \frac{25.25-24.46}{24.46} = 0.1 \times \frac{0.79}{24.46} \approx 0.00323)$
+2. $(0.1 \times \frac{457259.2-0}{2162010.8} = 0.1 \times \frac{457259.2}{2162010.8} \approx 0.02115)$
+3. $(0.1 \times \frac{472.81-437.56}{437.56} = 0.1 \times \frac{35.25}{437.56} \approx 0.00805)$
+4. $(0.1 \times \frac{55.97-55.74}{55.74} = 0.1 \times \frac{0.23}{55.74} \approx 0.00041)$
+5. $(0.1 \times \frac{400.93-331.31}{331.31} = 0.1 \times \frac{69.62}{331.31} \approx 0.02103)$
+6. $(0.1 \times \frac{0-240250.93}{240250.93} = 0.1 \times \frac{-240250.93}{240250.93} = -0.1)$
+7. $(-0.1 \times \frac{16-17.79}{17.79} = -0.1 \times \frac{-1.79}{17.79} \approx 0.01006)$
+8. $(-0.1 \times \frac{1.32-3.94}{3.94} = -0.1 \times \frac{-2.62}{3.94} \approx 0.06650)$
+9. $(-0.1 \times \frac{41.25-42.25}{42.25} = -0.1 \times \frac{-1}{42.25} \approx 0.00237)$
+
+10.$(-0.1 \times \frac{358.79-505.19}{505.19} = -0.1 \times \frac{-146.4}{505.19} \approx 0.02899)$
+
+summing them all:
+
+$$
+CFPI_t \approx 0.00323 + 0.02115 + 0.00805 + 0.00041 + 0.02103 - 0.1 + 0.01006 + 0.06650 + 0.00237 + 0.02899
+$$
+:::
+The computed CFPI is
+$$
+\boxed{0.062}
+$$
+:::
+
+---
+
+## 9. CFPI  Sample interpretation
+
+:::{smaller}
+
+| CFPI Value          | Interpretation | Policy Action                      |
+| ------------------- | -------------- | ---------------------------------- |
+| Less than -0.05     | **Stable**     | No action                          |
+| -0.05 to 0.05       | **Watch**      | Monitor closely                    |
+| Greater than 0.05   | **Trigger**    | Implement floor price mechanism    |
+
+  > Thresholds may vary by purpose; monitor historical trends and seasonal patterns to calibrate levels accurately.
+:::
+
+
+---
+
+## 10. CFPI Calculator
+
+Access the interactive CFPI calculator to explore the latest indicators:
+
+[Open CFPI Calculator](https://ricelytics.philrice.gov.ph/shiny/cfpi_calculator/){.btn .btn-success target="_blank"}
+
+---
+
+## 
+
+::: thank-you
+::: {style="font-size: 2.5em; font-weight: bold; text-align: center;"}
+Thank You!!
+:::
+
+::: {style="margin-top: 1em; font-size: 1.2em; text-align: center;"}
+Questions or feedback?<br> <strong>philrice.dataanalytics\@gmail.com</strong>
+:::
+:::
+
 

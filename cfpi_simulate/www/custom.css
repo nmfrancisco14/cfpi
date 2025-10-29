@@ -1,0 +1,51 @@
+/* Card style */
+.card {
+  border-radius: 15px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+.card-header {
+  background-color: #3b7a57;
+  color: white;
+  font-weight: 600;
+  font-size: 1.1rem;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+/* Buttons */
+.btn-success {
+  background-color: #3b7a57;
+  border-color: #3b7a57;
+  font-weight: 600;
+}
+.btn-success:hover {
+  background-color: #2e6447;
+  border-color: #2e6447;
+}
+
+/* Sliders */
+.irs-bar {
+  background: linear-gradient(to right, #6dbb6d , #f6b93b, #f08c00);
+}
+.irs-from, .irs-to, .irs-single {
+  background: #3b7a57;
+  color: white;
+}
+
+/* DataTable */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  background-color: #3b7a57 !important;
+  color: white !important;
+  border-radius: 5px;
+  margin: 2px;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background-color: #f08c00 !important;
+  color: white !important;
+}
+.dataTables_wrapper .dataTables_filter input {
+  border-radius: 8px;
+  padding: 5px;
+  border: 1px solid #ccc;
+}

@@ -1,6 +1,8 @@
 library(shiny)
 library(bslib)
 library(shinyWidgets)
+library(DT)
+library(tidyverse)
 
 
 
@@ -9,6 +11,38 @@ library(shinyWidgets)
 cfpi_data <- readRDS("cfpidata.rds")
 
 cfpi_com <-  readRDS("cfpi_computed.rds")
+
+
+
+# card list ui ------------------------------------------------------------
+
+
+indicators <- c("Farmgate Price Deviation",
+                "Farmer Profit Deviation",
+                "Retail Price Deviation",
+                "Retail–Farmgate Price Gap",
+                "Area Harvested Ratio",
+                "Fertilizer Cost Deviation",
+                "Fuel Price Deviation",
+                "Monthly Rainfall Deviation",
+                "Import Arrival Deviation",
+                " Global Rice Price Deviation")
+
+
+
+cards <- lapply(1:10, function(i) {
+  card(
+    card_header(indicators[[i]]),
+    card_body(
+      numericInput(
+        inputId = paste0("ind", i),
+        label = NULL,
+        value = 0,
+        step = 0.01
+      )
+    )
+  )
+})
 
 # ----- THEME -----
 agri_theme <- bs_theme(
@@ -22,6 +56,11 @@ agri_theme <- bs_theme(
 ui <- page_sidebar(
   theme = agri_theme,
   title = div(icon("seedling", class = "me-2"), "Composite Floor Price Index (CFPI) Simulator"),
+
+  tags$head(
+    tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+  ),
+
 
   tags$script(HTML("
   Shiny.addCustomMessageHandler('bindCompute', function(x) {
@@ -41,7 +80,6 @@ ui <- page_sidebar(
     checkboxInput("normalize", "Auto-normalize weights (Σw = 1)", value = TRUE),
     br(),
 
-    # Indicator groups
     h5("A. Farm-level"),
     sliderInput("w1", "w₁: Farmgate Price Deviation (↓)", 0, 1, 0.1, step = 0.01),
     sliderInput("w2", "w₂: Profit Deviation (↓)", 0, 1, 0.1, step = 0.01),
@@ -67,51 +105,36 @@ ui <- page_sidebar(
   # MAIN CONTENT
   layout_column_wrap(
     width = 1,
-    layout_column_wrap(
-      width = 1/2,
+    layout_columns(
+      col_widths = c(8, 4),  # 8 units for indicators, 4 for CFPI
+      # Left column: 10 indicators in 2 rows x 5 columns
+      layout_column_wrap(
+        width = 1/5,
+        cards[[1]],cards[[2]],cards[[3]],cards[[4]],cards[[5]],
+        cards[[6]],cards[[7]],cards[[8]],cards[[9]],cards[[10]]
+        ),
+
+      # CFPI card as the 6th object (full width)
       card(
-        card_header("📊 Simulation Result"),
+        card_header("📊 Composite Floor Price Index (CFPI)"),
         card_body(
-          h4("Composite Floor Price Index (CFPI)"),
+          h4("CFPI Value"),
           uiOutput("cfpi_value"),
           br(),
-          p("Interpretation: A higher CFPI indicates rising farmgate price risk —
-          suggesting the need for earlier floor price intervention.")
-        )
-      ),
-
-      card(
-        card_header("🔢 Indicator Deviations"),
-        card_body(
-          helpText("Enter simulated deviations (Δ) for each indicator:"),
-          fluidRow(
-            column(6, numericInput("ind1", "FarmDev (Δ₁)", 0.02, step = 0.01)),
-            column(6, numericInput("ind2", "ProfitDev (Δ₂)", -0.03, step = 0.01)),
-            column(6, numericInput("ind3", "RetDev (Δ₃)", 0.01, step = 0.01)),
-            column(6, numericInput("ind4", "RetGap (Δ₄)", 0.05, step = 0.01)),
-            column(6, numericInput("ind5", "Area (Δ₅)", -0.02, step = 0.01)),
-            column(6, numericInput("ind6", "FertCost (Δ₆)", 0.04, step = 0.01)),
-            column(6, numericInput("ind7", "FuelPrice (Δ₇)", 0.03, step = 0.01)),
-            column(6, numericInput("ind8", "Rain (Δ₈)", 0.01, step = 0.01)),
-            column(6, numericInput("ind9", "Imports (Δ₉)", 0.06, step = 0.01)),
-            column(6, numericInput("ind10", "GlobalPrice (Δ₁₀)", -0.02, step = 0.01))
-          )
+          p("Interpretation: A higher CFPI indicates rising farmgate price risk — suggesting the need for earlier floor price intervention.")
         )
       )
-
     ),
 
     card(
       full_screen = TRUE,
-      card_header("🧾 Sample Data for Simulation"),
+      card_header("🧾 Actual Data for Simulation"),
       card_body(
         DTOutput("data_table"),
         br(),
         p("Click a row to load indicator values into the simulation.", class = "text-muted small")
       )
     )
-
-
   )
 )
 
