@@ -322,11 +322,11 @@ gt_table <- cfpidata_sample %>%
     title = "Sample Rice Price and Cost Indicators for Sept 2025"
   ) %>%
   tab_options(
-    table.width = pct(75),          # Fit table width
-    table.font.size = px(14),       # Font size for readability
-    heading.title.font.size = px(18),
+    table.width = pct(80),          # Fit table width
+    table.font.size = px(10),       # Font size for readability
+    heading.title.font.size = px(12),
     heading.title.font.weight = "bold",
-    column_labels.font.size = px(13),
+    column_labels.font.size = px(10),
     column_labels.font.weight = "bold",
     table.border.top.width = px(2),
     table.border.bottom.width = px(2),
@@ -338,9 +338,11 @@ gt_table
 
 ```
 
-> Using equal weights of 0.1
 
 ::: {.tiny-text}
+
+Using equal weights of 0.1 :
+
 ```{r results='asis'}
 library(glue)
 
@@ -386,31 +388,38 @@ cat(cfpi_formula2)
 
 ```
 
+::: columns
+::: column
+### Compute each term
 
-Compute each term:
+1. $(0.1 \times \frac{25.25-24.46}{24.46} = 0.1 \times \frac{0.79}{24.46} \approx 0.00323)$  
+2. $(0.1 \times \frac{457259.2-0}{2162010.8} = 0.1 \times \frac{457259.2}{2162010.8} \approx 0.02115)$  
+3. $(0.1 \times \frac{472.81-437.56}{437.56} = 0.1 \times \frac{35.25}{437.56} \approx 0.00805)$  
+4. $(0.1 \times \frac{55.97-55.74}{55.74} = 0.1 \times \frac{0.23}{55.74} \approx 0.00041)$  
+5. $(0.1 \times \frac{400.93-331.31}{331.31} = 0.1 \times \frac{69.62}{331.31} \approx 0.02103)$  
+6. $(0.1 \times \frac{0-240250.93}{240250.93} = 0.1 \times \frac{-240250.93}{240250.93} = -0.1)$  
+7. $(-0.1 \times \frac{16-17.79}{17.79} = -0.1 \times \frac{-1.79}{17.79} \approx 0.01006)$  
+8. $(-0.1 \times \frac{1.32-3.94}{3.94} = -0.1 \times \frac{-2.62}{3.94} \approx 0.06650)$  
+9. $(-0.1 \times \frac{41.25-42.25}{42.25} = -0.1 \times \frac{-1}{42.25} \approx 0.00237)$  
+10. $(-0.1 \times \frac{358.79-505.19}{505.19} = -0.1 \times \frac{-146.4}{505.19} \approx 0.02899)$  
+:::
 
-1. $(0.1 \times \frac{25.25-24.46}{24.46} = 0.1 \times \frac{0.79}{24.46} \approx 0.00323)$
-2. $(0.1 \times \frac{457259.2-0}{2162010.8} = 0.1 \times \frac{457259.2}{2162010.8} \approx 0.02115)$
-3. $(0.1 \times \frac{472.81-437.56}{437.56} = 0.1 \times \frac{35.25}{437.56} \approx 0.00805)$
-4. $(0.1 \times \frac{55.97-55.74}{55.74} = 0.1 \times \frac{0.23}{55.74} \approx 0.00041)$
-5. $(0.1 \times \frac{400.93-331.31}{331.31} = 0.1 \times \frac{69.62}{331.31} \approx 0.02103)$
-6. $(0.1 \times \frac{0-240250.93}{240250.93} = 0.1 \times \frac{-240250.93}{240250.93} = -0.1)$
-7. $(-0.1 \times \frac{16-17.79}{17.79} = -0.1 \times \frac{-1.79}{17.79} \approx 0.01006)$
-8. $(-0.1 \times \frac{1.32-3.94}{3.94} = -0.1 \times \frac{-2.62}{3.94} \approx 0.06650)$
-9. $(-0.1 \times \frac{41.25-42.25}{42.25} = -0.1 \times \frac{-1}{42.25} \approx 0.00237)$
-
-10.$(-0.1 \times \frac{358.79-505.19}{505.19} = -0.1 \times \frac{-146.4}{505.19} \approx 0.02899)$
-
-summing them all:
+::: column
+### Summing them all
 
 $$
 CFPI_t \approx 0.00323 + 0.02115 + 0.00805 + 0.00041 + 0.02103 - 0.1 + 0.01006 + 0.06650 + 0.00237 + 0.02899
 $$
+
+### The computed CFPI is
+
+$$
+CFPI_t \approx 0.06179
+$$
 :::
-The computed CFPI is
-$$
-\boxed{0.062}
-$$
+:::
+
+:::
 :::
 
 ---

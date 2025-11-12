@@ -1,0 +1,141 @@
+---
+title: "Composite Floor Price Index (CFPI) for Palay"
+subtitle: "Trigger mechanism for floor prices"
+author: "PhilRice Data Analytics Center"
+institute: "Philippine Rice Research Institute"
+format:
+  revealjs:
+    css: www/custom-styles.css
+    transition: fade
+    slide-number: true
+    controls: true
+    logo: www/dac.png
+    footer: "PhilRice Data Analytics Center"
+execute: 
+  echo: false
+  warning: false
+  message: false
+---
+
+## Why We Need a Floor Price
+
+- During **harvest time**, palay prices often **drop sharply**, leaving farmers with low income.  
+- Rising **costs of fertilizer, fuel, and labor** make it hard to recover from price declines.  
+- **Executive Order No. 100 (2025)** directs the government to set a **minimum or “floor” price** to protect farmers.  
+- But **when** should we trigger this floor price?  
+  → That’s where the **Composite Floor Price Index (CFPI)** helps.
+
+---
+
+## What is the CFPI?
+
+- The **CFPI** is a **summary number** that combines many signals affecting palay prices.  
+- It acts like an **“early warning system”** — showing when the market is likely to drop below fair value.  
+- When the CFPI goes **above a certain level**, it signals that government action (like procurement or support) may be needed.
+
+---
+
+## The Idea Behind It
+
+The CFPI pulls together information from different parts of the rice market:
+
+1. **Prices** – farmgate and retail  
+2. **Production Costs** – fertilizer, fuel, etc.  
+3. **Supply Factors** – area harvested, imports, rainfall  
+4. **Global Trends** – world rice prices  
+
+Each of these indicators contributes to how risky or safe the situation is for farmers.
+
+---
+
+## The CFPI Equation (Simplified)
+
+$$
+CFPI = w_1 X_1 + w_2 X_2 + ... + w_{10} X_{10}
+$$
+
+Where each **X** is an indicator (like farmgate price or fertilizer cost), and each **w** is its importance or weight.
+
+👉 A **higher CFPI** means farmers are **more at risk** of price drops.
+
+---
+
+## Sample Indicators {.smaller}
+
+
+| Category | Example Indicator | Meaning |
+|-----------|------------------|----------|
+| Farm Prices | Farmgate Price | Lower than usual → warning sign |
+| Costs | Fertilizer, Fuel | Rising → lower profit for farmers |
+| Supply | Damaged Area | Less harvest → possible shortage |
+| Trade | Import Volume | High imports → more market pressure |
+| Climate | Rainfall | Too much or too little → affects yield |
+
+
+---
+
+## Example (Simplified) {.smaller}
+
+Suppose we give **equal weight (0.1)** to 10 indicators:
+
+| Indicator | Value Change | Weighted Effect |
+|------------|---------------|----------------|
+| Farm price ↓ | -0.05 | -0.005 |
+| Profit ↓ | -0.10 | -0.010 |
+| Retail price stable | 0.00 | 0.000 |
+| Price gap ↑ | +0.02 | +0.002 |
+| Harvest area ↓ | -0.03 | -0.003 |
+| Fertilizer cost ↑ | +0.08 | +0.008 |
+| Fuel cost ↑ | +0.04 | +0.004 |
+| Rainfall excess | +0.02 | +0.002 |
+| Imports ↑ | +0.05 | +0.005 |
+| Global price ↓ | -0.06 | -0.006 |
+
+---
+
+## Adding Them Up {.smaller}
+
+$$
+\begin{aligned}
+CFPI = &(-0.005 -0.010 + 0.000 + 0.002 -0.003) \\
+       &+ (0.008 + 0.004 + 0.002 + 0.005 -0.006) \\
+       &= -0.003
+\end{aligned}
+$$
+
+✅ Result: **-0.003** means the market is **stable** for now.  
+⚠️ If it were **above 0.05**, that would signal a **trigger** for support.
+
+---
+
+## How to Read CFPI Values
+
+| CFPI Value | Meaning | Suggested Action |
+|-------------|----------|------------------|
+| **< -0.05** | Stable | No action needed |
+| **-0.05 to 0.05** | Watch | Monitor closely |
+| **> 0.05** | Trigger | Implement floor price |
+
+---
+
+## Why It Matters
+
+- Helps **anticipate** market downturns before they hurt farmers.  
+- Makes floor price decisions **data-driven** instead of reactive.  
+- Encourages **transparent** and **evidence-based** policymaking.  
+
+---
+
+## Try It Yourself!
+
+Explore the latest CFPI indicators and simulate results:
+
+[**Open CFPI Calculator**](https://ricelytics.philrice.gov.ph/shiny/cfpi_calculator/){.btn .btn-success target="_blank"}
+
+---
+
+## Thank You!
+
+**PhilRice Data Analytics Center**  
+📧 *philrice.dataanalytics@gmail.com*  
+🌐 *https://ricelytics.philrice.gov.ph*
