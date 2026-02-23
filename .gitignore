@@ -12,3 +12,5 @@ cfpi.html
 cfpi short.html
 /cfpi short_files
 /rsconnect
+
+**/*.quarto_ipynb
